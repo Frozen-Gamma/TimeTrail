@@ -1,6 +1,10 @@
 package com.github.FrozenGamma.TimeTrail;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,29 +16,68 @@ import org.bukkit.block.Sign;
 
 public class SignListener extends JavaPlugin implements Listener
 {
-	Logger log = Logger.getLogger("Minecraft");
-
+	public static Map<Player, Boolean> counting = new HashMap<Player, Boolean>();
+	public static Map<Player, Integer> ticks = new HashMap<Player, Integer>();
+	static Logger log = Logger.getLogger("Minecraft");
+	
 	@EventHandler
 	public static void signListener(PlayerInteractEvent event)
 	{
+		Player player = (Player) event.getPlayer();
 		Action action = event.getAction();
 		Block block = event.getClickedBlock();
-		
+	
+
 		if(action == Action.RIGHT_CLICK_BLOCK && (block.getType() == Material.SIGN || (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN))) 
 		{
-			Sign s = (Sign)event.getClickedBlock().getState();
-			String signText = s.getLine(0);
-		    if(signText.equalsIgnoreCase("[TimeTrail]"))
-		    {
-		    	if(com.github.FrozenGamma.TimeTrail.TimeTrail.counting == false)
+			try
+			{
+				Sign s = (Sign) event.getClickedBlock().getState();
+				String signText = s.getLine(0);
+		    	if(signText.equalsIgnoreCase("[TimeTrail]"))
 		    	{
-		    		com.github.FrozenGamma.TimeTrail.TimeTrail.counting = true;
+		    		if(!counting.get(player))
+		    		{
+		    			ticks.put(player, 1);
+		    			counting.put(player, true);
+		    			com.github.FrozenGamma.TimeTrail.TimeTrail.ticks(player);
+		    		}
+		    		else
+		    		{
+		    			ticks.put(player, 0);
+		    			counting.put(player, false);
+		    		}
 		    	}
-		    	else
+			}
+			catch (Exception e)
+			{
+				counting.put(player, false);
+				Sign s = (Sign) event.getClickedBlock().getState();
+				String signText = s.getLine(0);
+		    	if(signText.equalsIgnoreCase("[TimeTrail]"))
 		    	{
-		    		com.github.FrozenGamma.TimeTrail.TimeTrail.counting = false;
+		    		if(!counting.get(player))
+		    		{
+		    			ticks.put(player, 1);
+		    			counting.put(player, true);
+		    			com.github.FrozenGamma.TimeTrail.TimeTrail.ticks(player);
+		    		}
+		    		else
+		    		{
+		    			ticks.put(player, 0);
+		    			counting.put(player, false);
+		    		}
 		    	}
-		    }
+			}
+		}
+	}
+
+	public static void amountticks(Player player)
+	{
+		if(counting.get(player))
+		{
+			log.info(counting.toString());
+			log.info(ticks.toString());
 		}
 	}
 }
