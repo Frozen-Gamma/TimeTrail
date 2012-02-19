@@ -74,10 +74,8 @@ public class SignListener extends JavaPlugin implements Listener
 
 	public static void amountticks(Player player)
 	{
-		if(counting.get(player))
-		{
-			//log.info(counting.toString());
-			//log.info(ticks.toString());
-		}
+		//log.info(counting.toString()); // Show the value of counting
+		//log.info(ticks.toString()); // Show the value of ticks
+		// Both are used as debugging code
 	}
 }

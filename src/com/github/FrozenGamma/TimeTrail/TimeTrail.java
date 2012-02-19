@@ -30,7 +30,10 @@ public class TimeTrail extends JavaPlugin
             @Override
             public void run()
             {
-            	com.github.FrozenGamma.TimeTrail.SignListener.amountticks(player);
+            	if(com.github.FrozenGamma.TimeTrail.SignListener.counting.get(player))
+            	{
+            		com.github.FrozenGamma.TimeTrail.SignListener.amountticks(player);
+            	}
             }
         }, 0, 1);
 	}
