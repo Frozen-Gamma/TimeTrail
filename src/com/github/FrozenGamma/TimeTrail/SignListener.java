@@ -38,7 +38,7 @@ public class SignListener extends JavaPlugin implements Listener
 		    	{
 		    		if(!counting.get(player))
 		    		{
-		    			ticks.put(player, 1);
+		    			ticks.put(player, 0);
 		    			counting.put(player, true);
 		    			com.github.FrozenGamma.TimeTrail.TimeTrail.ticks(player);
 		    		}
@@ -58,7 +58,7 @@ public class SignListener extends JavaPlugin implements Listener
 		    	{
 		    		if(!counting.get(player))
 		    		{
-		    			ticks.put(player, 1);
+		    			ticks.put(player, 0);
 		    			counting.put(player, true);
 		    			com.github.FrozenGamma.TimeTrail.TimeTrail.ticks(player);
 		    		}
@@ -76,8 +76,8 @@ public class SignListener extends JavaPlugin implements Listener
 	{
 		if(counting.get(player))
 		{
-			log.info(counting.toString());
-			log.info(ticks.toString());
+			//log.info(counting.toString());
+			//log.info(ticks.toString());
 		}
 	}
 }
