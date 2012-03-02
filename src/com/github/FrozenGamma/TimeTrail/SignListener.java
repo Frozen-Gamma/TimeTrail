@@ -2,7 +2,6 @@ package com.github.FrozenGamma.TimeTrail;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -16,6 +15,8 @@ import org.bukkit.block.Sign;
 
 public class SignListener extends JavaPlugin implements Listener
 {
+	public static boolean playerNotNull = false;
+	static Player player;
 	public static Map<Player, Boolean> counting = new HashMap<Player, Boolean>();
 	public static Map<Player, Integer> ticks = new HashMap<Player, Integer>();
 	static Logger log = Logger.getLogger("Minecraft");
@@ -23,11 +24,10 @@ public class SignListener extends JavaPlugin implements Listener
 	@EventHandler
 	public static void signListener(PlayerInteractEvent event)
 	{
-		Player player = (Player) event.getPlayer();
+		player = (Player) event.getPlayer();
 		Action action = event.getAction();
 		Block block = event.getClickedBlock();
-	
-
+		
 		if(action == Action.RIGHT_CLICK_BLOCK && (block.getType() == Material.SIGN || (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN))) 
 		{
 			try
@@ -40,12 +40,11 @@ public class SignListener extends JavaPlugin implements Listener
 		    		{
 		    			ticks.put(player, 0);
 		    			counting.put(player, true);
-		    			com.github.FrozenGamma.TimeTrail.TimeTrail.ticks(player);
 		    		}
 		    		else
 		    		{
-		    			ticks.put(player, 0);
 		    			counting.put(player, false);
+		    			log.info(ticks.toString());
 		    		}
 		    	}
 			}
@@ -56,26 +55,22 @@ public class SignListener extends JavaPlugin implements Listener
 				String signText = s.getLine(0);
 		    	if(signText.equalsIgnoreCase("[TimeTrail]"))
 		    	{
-		    		if(!counting.get(player))
-		    		{
-		    			ticks.put(player, 0);
-		    			counting.put(player, true);
-		    			com.github.FrozenGamma.TimeTrail.TimeTrail.ticks(player);
-		    		}
-		    		else
-		    		{
-		    			ticks.put(player, 0);
-		    			counting.put(player, false);
-		    		}
+		    		ticks.put(player, 0);
+		    		counting.put(player, true);
+		    		playerNotNull = true;
 		    	}
 			}
 		}
 	}
 
-	public static void amountticks(Player player)
+	public static void ticks()
 	{
-		//log.info(counting.toString()); // Show the value of counting
-		//log.info(ticks.toString()); // Show the value of ticks
-		// Both are used as debugging code
+		if(counting.get(player))
+		{
+			ticks.put(player, ticks.get(player) + 1);			
+			//log.info(counting.toString()); // Show the value of counting
+			//log.info(ticks.toString()); // Show the value of ticks
+			// Both are used as debugging code
+		}		
 	}
 }
