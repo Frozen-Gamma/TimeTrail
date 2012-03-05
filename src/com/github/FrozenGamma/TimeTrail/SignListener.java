@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -21,7 +22,7 @@ public class SignListener extends JavaPlugin implements Listener
 	public static Player[] playersOnline;
 	static Player player, playerLogin;
 	public static Map<Player, Boolean> counting = new HashMap<Player, Boolean>();
-	public static Map<Player, Integer> ticks = new HashMap<Player, Integer>();
+	public static Map<Player, Double> ticks = new HashMap<Player, Double>();
 	static Logger log = Logger.getLogger("Minecraft");
 	
 	@EventHandler
@@ -29,7 +30,7 @@ public class SignListener extends JavaPlugin implements Listener
 	{
 		playerLogin = event.getPlayer();
 		counting.put(playerLogin, false);
-		ticks.put(playerLogin, 0);
+		ticks.put(playerLogin, 0.00);
 	}
 	
 	@EventHandler
@@ -47,13 +48,14 @@ public class SignListener extends JavaPlugin implements Listener
 		    {
 		    	if(!counting.get(player))
 		    	{
-		    		ticks.put(player, 0);
+		    		ticks.put(player, 0.00);
 		    		counting.put(player, true);
 		    	}
 		    	else
 		    	{
 		    		counting.put(player, false);
 		    		log.info(ticks.toString());
+		    		player.sendMessage("Your time was: " + ChatColor.RED + ticks.get(player) / 20 + ChatColor.WHITE + " seconds.");
 		    	}
 		    }
 		}
