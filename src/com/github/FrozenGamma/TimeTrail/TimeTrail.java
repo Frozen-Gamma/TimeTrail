@@ -20,7 +20,7 @@ public class TimeTrail extends JavaPlugin
             @Override
             public void run()
             {
-            	if(SignListener.playerNotNull)
+            	if(SignListener.player != null)
             	{
                 	SignListener.ticks();
             	}

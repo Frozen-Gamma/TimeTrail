@@ -5,6 +5,8 @@ import org.bukkit.event.Listener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -15,7 +17,7 @@ import org.bukkit.block.Sign;
 
 public class SignListener extends JavaPlugin implements Listener
 {
-	public static boolean playerNotNull = false;
+	public static Player[] playersOnline;
 	static Player player;
 	public static Map<Player, Boolean> counting = new HashMap<Player, Boolean>();
 	public static Map<Player, Integer> ticks = new HashMap<Player, Integer>();
@@ -57,7 +59,6 @@ public class SignListener extends JavaPlugin implements Listener
 		    	{
 		    		ticks.put(player, 0);
 		    		counting.put(player, true);
-		    		playerNotNull = true;
 		    	}
 			}
 		}
@@ -65,12 +66,13 @@ public class SignListener extends JavaPlugin implements Listener
 
 	public static void ticks()
 	{
-		if(counting.get(player))
+		playersOnline = (Bukkit.getOnlinePlayers());
+		for(Player p : playersOnline)
 		{
-			ticks.put(player, ticks.get(player) + 1);			
-			//log.info(counting.toString()); // Show the value of counting
-			//log.info(ticks.toString()); // Show the value of ticks
-			// Both are used as debugging code
-		}		
+			if(counting.get(p) != null && counting.get(p))
+			{
+				ticks.put(p, ticks.get(p) + 1);
+			}
+		}
 	}
 }
