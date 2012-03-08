@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,7 +21,7 @@ import org.bukkit.block.Sign;
 public class SignListener extends JavaPlugin implements Listener
 {
 	public static Player[] playersOnline;
-	static Player player, playerLogin;
+	static Player player, playerLogin, playerDeath;
 	public static Map<Player, Boolean> counting = new HashMap<Player, Boolean>();
 	public static Map<Player, Double> ticks = new HashMap<Player, Double>();
 	static Logger log = Logger.getLogger("Minecraft");
@@ -31,6 +32,18 @@ public class SignListener extends JavaPlugin implements Listener
 		playerLogin = event.getPlayer();
 		counting.put(playerLogin, false);
 		ticks.put(playerLogin, 0.00);
+	}
+	
+	@EventHandler
+	public static void deathEvent(PlayerDeathEvent event)
+	{
+		playerDeath = (Player) event.getEntity();
+		if(counting.get(playerDeath))
+		{
+			playerDeath.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You died, counting has stopped.");
+			counting.put(playerDeath, false);
+			ticks.put(playerDeath, 0.00);
+		}
 	}
 	
 	@EventHandler
@@ -50,12 +63,13 @@ public class SignListener extends JavaPlugin implements Listener
 		    	{
 		    		ticks.put(player, 0.00);
 		    		counting.put(player, true);
+		    		player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Counting has begun.");
 		    	}
 		    	else
 		    	{
 		    		counting.put(player, false);
 		    		log.info(ticks.toString());
-		    		player.sendMessage("Your time was: " + ChatColor.RED + ticks.get(player) / 20 + ChatColor.WHITE + " seconds.");
+		    		player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Your time was: " + ChatColor.RED + ticks.get(player) / 20 + ChatColor.WHITE + " seconds.");
 		    	}
 		    }
 		}
