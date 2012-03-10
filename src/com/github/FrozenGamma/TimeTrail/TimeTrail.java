@@ -7,13 +7,17 @@ import java.util.logging.Logger;
 
 public class TimeTrail extends JavaPlugin
 {	
+	public static boolean Permissions = false;
 	public SignListener signListener = new SignListener();
 	static Logger log = Logger.getLogger("Minecraft");
 	
 	public void onEnable()
 	{
 		PluginManager pm = getServer().getPluginManager();
-		
+		if(pm.isPluginEnabled("bPermissions") || pm.isPluginEnabled("PermissionsEx"))
+		{
+			Permissions = true;
+		}
 		pm.registerEvents(this.signListener, this);
 		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
 		{

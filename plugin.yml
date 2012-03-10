@@ -1,3 +1,8 @@
 name: TimeTrail
 main: com.github.FrozenGamma.TimeTrail.TimeTrail
-version: 1.0
+version: 1.1
+permissions:
+   TimeTrail.create:
+       description: Allows a player to create a TimeTrail track.
+   TimeTrail.use:
+       description: Allows a player to use a TimeTrail track.

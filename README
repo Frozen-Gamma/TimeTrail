@@ -1,5 +1,8 @@
 Changelog:
 
+Version 1.1:
+- Added permissions for bPermissions and PermissionsEx
+
 Version 1.0:
 - Initial startup
 - Counting is possible but there are no config options available.
@@ -12,3 +15,10 @@ Sign layout:
    [TimeTrail]  <--- Not case sensitive
     Trackname   <--- Case sensitive
     Begin/End   <--- Not case sensitive
+
+Permissions:
+- TimeTrail.create -- Allows players to create TimeTrail tracks.
+- TimeTrail.use -- Allows players to use TimeTrail tracks.
+- TimeTrail.* -- Does both, only works for PermissionsEx.
+
+If PermissionsEx/bPermissions is not detected only OPs can make tracks and everyone can use them.
