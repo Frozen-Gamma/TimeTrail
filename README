@@ -1,5 +1,8 @@
 Changelog:
 
+Version 1.1.1:
+- TimeTrail.* can now also be used on bPermissions
+
 Version 1.1:
 - Added permissions for bPermissions and PermissionsEx
 
@@ -19,6 +22,6 @@ Sign layout:
 Permissions:
 - TimeTrail.create -- Allows players to create TimeTrail tracks.
 - TimeTrail.use -- Allows players to use TimeTrail tracks.
-- TimeTrail.* -- Does both, only works for PermissionsEx.
+- TimeTrail.* -- Does both
 
 If PermissionsEx/bPermissions is not detected only OPs can make tracks and everyone can use them.

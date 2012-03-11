@@ -39,7 +39,7 @@ public class SignListener extends JavaPlugin implements Listener
 		{
 			if(TimeTrail.Permissions)
 			{
-				if(playerPlacer.hasPermission("TimeTrail.create"))
+				if(playerPlacer.hasPermission("TimeTrail.create") || playerPlacer.hasPermission("TimeTrail.*"))
 				{
 					if(!signTextLine2.isEmpty() && (signTextLine3.equalsIgnoreCase("Begin") || signTextLine3.equalsIgnoreCase("End")))
 					{
@@ -135,7 +135,7 @@ public class SignListener extends JavaPlugin implements Listener
 		    {
 				if(TimeTrail.Permissions)
 				{
-					if(player.hasPermission("TimeTrail.use"))
+					if(player.hasPermission("TimeTrail.use") || player.hasPermission("TimeTrail.*"))
 					{
 						if(!signTextLine2.isEmpty() && (signTextLine3.equalsIgnoreCase("Begin") || signTextLine3.equalsIgnoreCase("End")))
 						{
