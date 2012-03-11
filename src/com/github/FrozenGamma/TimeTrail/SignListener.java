@@ -137,44 +137,7 @@ public class SignListener extends JavaPlugin implements Listener
 				{
 					if(player.hasPermission("TimeTrail.use") || player.hasPermission("TimeTrail.*"))
 					{
-						if(!signTextLine2.isEmpty() && (signTextLine3.equalsIgnoreCase("Begin") || signTextLine3.equalsIgnoreCase("End")))
-						{
-							if(TrackName.get(player) == null && signTextLine3.equalsIgnoreCase("Begin"))
-							{
-								TrackName.put(player, signTextLine2);
-								ticks.put(player, 0.00);
-								counting.put(player, true);
-								player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Counting has begun.");
-							}
-							else if(signTextLine2.equalsIgnoreCase(TrackName.get(player)) && signTextLine3.equalsIgnoreCase("End"))
-							{
-								TrackName.put(player, null);
-								counting.put(player, false);
-								player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Your time was: " + ChatColor.RED + ticks.get(player) / 20 + ChatColor.WHITE + " seconds.");
-							}
-							else if(signTextLine2.equalsIgnoreCase(TrackName.get(player)) && signTextLine3.equalsIgnoreCase("Begin"))
-							{
-								TrackName.put(player, null);
-							    counting.put(player, false);
-								player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Counting has stopped.");
-							}
-							else if(TrackName.get(player) == null && signTextLine3.equalsIgnoreCase("End"))
-							{
-								player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You haven't started counting.");
-							}
-							else if(!signTextLine2.equalsIgnoreCase(TrackName.get(player)) && signTextLine3.equalsIgnoreCase("Begin"))
-							{
-								player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You're already doing track: " + ChatColor.RED + TrackName.get(player));
-							}
-							else if(!signTextLine2.equalsIgnoreCase(TrackName.get(player)) && signTextLine3.equalsIgnoreCase("End"))
-							{
-								player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] This is the wrong ending.");
-							}
-						}
-						else
-						{
-							player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Invalid sign.");
-						}
+						messagePlayer(signTextLine1, signTextLine2, signTextLine3, player);
 					}
 					else
 					{
@@ -185,37 +148,7 @@ public class SignListener extends JavaPlugin implements Listener
 				{
 					if(!signTextLine2.isEmpty() && (signTextLine3.equalsIgnoreCase("Begin") || signTextLine3.equalsIgnoreCase("End")))
 					{
-						if(TrackName.get(player) == null && signTextLine3.equalsIgnoreCase("Begin"))
-						{
-							TrackName.put(player, signTextLine2);
-							ticks.put(player, 0.00);
-							counting.put(player, true);
-							player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Counting has begun.");
-						}
-						else if(signTextLine2.equalsIgnoreCase(TrackName.get(player)) && signTextLine3.equalsIgnoreCase("End"))
-						{
-							TrackName.put(player, null);
-							counting.put(player, false);
-							player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Your time was: " + ChatColor.RED + ticks.get(player) / 20 + ChatColor.WHITE + " seconds.");
-						}
-						else if(signTextLine2.equalsIgnoreCase(TrackName.get(player)) && signTextLine3.equalsIgnoreCase("Begin"))
-						{
-							TrackName.put(player, null);
-						    counting.put(player, false);
-							player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Counting has stopped.");
-						}
-						else if(TrackName.get(player) == null && signTextLine3.equalsIgnoreCase("End"))
-						{
-							player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You haven't started counting.");
-						}
-						else if(!signTextLine2.equalsIgnoreCase(TrackName.get(player)) && signTextLine3.equalsIgnoreCase("Begin"))
-						{
-							player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You're already doing track: " + ChatColor.RED + TrackName.get(player));
-						}
-						else if(!signTextLine2.equalsIgnoreCase(TrackName.get(player)) && signTextLine3.equalsIgnoreCase("End"))
-						{
-							player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] This is the wrong ending.");
-						}
+						messagePlayer(signTextLine1, signTextLine2, signTextLine3, player);
 					}
 					else
 					{
@@ -235,6 +168,41 @@ public class SignListener extends JavaPlugin implements Listener
 			{
 				ticks.put(p, ticks.get(p) + 1);
 			}
+		}
+	}
+	
+	public static void messagePlayer(String signTextLine1, String signTextLine2, String signTextLine3, Player playerInteract)
+	{
+		if(TrackName.get(playerInteract) == null && signTextLine3.equalsIgnoreCase("Begin"))
+		{
+			TrackName.put(playerInteract, signTextLine2);
+			ticks.put(playerInteract, 0.00);
+			counting.put(playerInteract, true);
+			playerInteract.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Counting has begun.");
+		}
+		else if(signTextLine2.equalsIgnoreCase(TrackName.get(playerInteract)) && signTextLine3.equalsIgnoreCase("End"))
+		{
+			TrackName.put(playerInteract, null);
+			counting.put(playerInteract, false);
+			playerInteract.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Your time was: " + ChatColor.RED + ticks.get(playerInteract) / 20 + ChatColor.WHITE + " seconds.");
+		}
+		else if(signTextLine2.equalsIgnoreCase(TrackName.get(playerInteract)) && signTextLine3.equalsIgnoreCase("Begin"))
+		{
+			TrackName.put(playerInteract, null);
+		    counting.put(playerInteract, false);
+		    playerInteract.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] Counting has stopped.");
+		}
+		else if(TrackName.get(playerInteract) == null && signTextLine3.equalsIgnoreCase("End"))
+		{
+			playerInteract.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You haven't started counting.");
+		}
+		else if(!signTextLine2.equalsIgnoreCase(TrackName.get(playerInteract)) && signTextLine3.equalsIgnoreCase("Begin"))
+		{
+			playerInteract.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You're already doing track: " + ChatColor.RED + TrackName.get(playerInteract));
+		}
+		else if(!signTextLine2.equalsIgnoreCase(TrackName.get(playerInteract)) && signTextLine3.equalsIgnoreCase("End"))
+		{
+			playerInteract.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] This is the wrong ending.");
 		}
 	}
 }
