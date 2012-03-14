@@ -1,16 +1,5 @@
 Changelog:
 
-Version 1.1.1:
-- TimeTrail.* can now also be used on bPermissions
-
-Version 1.1:
-- Added permissions for bPermissions and PermissionsEx
-
-Version 1.0:
-- Initial startup
-- Counting is possible but there are no config options available.
-- No permissions.
-
 Installation:
 - Put TimeTrail.jar in your bukkit plugins folder.
 

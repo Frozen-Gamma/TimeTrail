@@ -43,7 +43,7 @@ public class SignListener extends JavaPlugin implements Listener
 				{
 					if(!signTextLine2.isEmpty() && (signTextLine3.equalsIgnoreCase("Begin") || signTextLine3.equalsIgnoreCase("End")))
 					{
-						if(signTextLine3.equals("Begin"))
+						if(signTextLine3.equalsIgnoreCase("Begin"))
 						{
 							playerPlacer.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] " + ChatColor.RED + signTextLine2 + ChatColor.WHITE + " has been made, be sure to make an ending.");
 						}
@@ -71,7 +71,7 @@ public class SignListener extends JavaPlugin implements Listener
 				{
 					if(!signTextLine2.isEmpty() && (signTextLine3.equalsIgnoreCase("Begin") || signTextLine3.equalsIgnoreCase("End")))
 					{
-						if(signTextLine3.equals("Begin"))
+						if(signTextLine3.equalsIgnoreCase("Begin"))
 						{
 							playerPlacer.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] " + ChatColor.RED + signTextLine2 + ChatColor.WHITE + " has been made, be sure to make an ending.");
 						}
