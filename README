@@ -7,7 +7,7 @@ Sign layout:
     Begin/End   <--- Not case sensitive
 
 Permissions:
-- TimeTrail.create -- Allows players to create TimeTrail tracks.
+- TimeTrail.create -- Allows players to create and destroy TimeTrail tracks.
 - TimeTrail.use -- Allows players to use TimeTrail tracks.
 - TimeTrail.* -- Does both
 

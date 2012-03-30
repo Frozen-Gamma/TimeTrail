@@ -8,10 +8,13 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -22,11 +25,35 @@ import org.bukkit.block.Sign;
 public class SignListener extends JavaPlugin implements Listener
 {
 	public static Player[] playersOnline;
-	static Player player, playerLogin, playerDeath, playerPlacer;
+	static Player player, playerLogin, playerDeath, playerPlacer, playerDestroyer;
 	public static Map<Player, Boolean> counting = new HashMap<Player, Boolean>();
 	public static Map<Player, Double> ticks = new HashMap<Player, Double>();
 	public static Map<Player, String> TrackName = new HashMap<Player, String>();
 	static Logger log = Logger.getLogger("Minecraft");
+	Sign isTimeTrailWallSign;
+	String isTimeTrailWallSignText;
+	
+	@EventHandler
+	public static void playerLogin(PlayerLoginEvent event)
+	{
+		playerLogin = event.getPlayer();
+		counting.put(playerLogin, false);
+		ticks.put(playerLogin, 0.00);
+		TrackName.put(playerLogin, null);
+	}
+	
+	@EventHandler
+	public static void deathEvent(PlayerDeathEvent event)
+	{
+		playerDeath = (Player) event.getEntity();
+		if(counting.get(playerDeath))
+		{
+			playerDeath.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You died, counting has stopped.");
+			counting.put(playerDeath, false);
+			ticks.put(playerDeath, 0.00);
+			TrackName.put(playerDeath, null);
+		}
+	}
 	
 	@EventHandler
 	public static void signPlace(SignChangeEvent event)
@@ -97,24 +124,102 @@ public class SignListener extends JavaPlugin implements Listener
 	}
 	
 	@EventHandler
-	public static void playerLogin(PlayerLoginEvent event)
+	public void signDestroy(BlockBreakEvent event)
 	{
-		playerLogin = event.getPlayer();
-		counting.put(playerLogin, false);
-		ticks.put(playerLogin, 0.00);
-		TrackName.put(playerLogin, null);
-	}
-	
-	@EventHandler
-	public static void deathEvent(PlayerDeathEvent event)
-	{
-		playerDeath = (Player) event.getEntity();
-		if(counting.get(playerDeath))
+		playerDestroyer = event.getPlayer();
+		Block block = event.getBlock();
+		Location location = event.getBlock().getLocation();
+		Location newLocationAbove = location.add(0, 1, 0);
+		Block blockAbove = newLocationAbove.getBlock();
+		
+		if(block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)
 		{
-			playerDeath.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You died, counting has stopped.");
-			counting.put(playerDeath, false);
-			ticks.put(playerDeath, 0.00);
-			TrackName.put(playerDeath, null);
+			Sign s = (Sign) block.getState();
+			String signTextLine1 = s.getLine(0);
+			if(signTextLine1.equalsIgnoreCase("[TimeTrail]"))
+			{
+				if(TimeTrail.Permissions)
+				{
+					if(playerDestroyer.hasPermission("TimeTrail.create") || playerDestroyer.hasPermission("TimeTrail.*"))
+					{
+						
+					}
+					else
+					{
+						event.setCancelled(true);
+						s.update();
+						player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You do not have the permission to destroy a TimeTrail sign.");
+					}
+				}
+				else
+				{
+					if(playerDestroyer.isOp())
+					{
+						
+					}
+					else
+					{
+						event.setCancelled(true);
+						s.update();
+						player.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] You can't destroy a TimeTrail sign.");
+					}
+				}
+			}
+		}
+		else if(blockAbove.getType() == Material.SIGN_POST)
+		{
+			Sign s = (Sign) blockAbove.getState();
+			String signTextLine1 = s.getLine(0);
+			if(signTextLine1.equalsIgnoreCase("[Timetrail]"))
+			{
+				if(TimeTrail.Permissions)
+				{
+					if(playerDestroyer.hasPermission("TimeTrail.create") || playerDestroyer.hasPermission("TimeTrail.*"))
+					{
+						
+					}
+					else
+					{
+						event.setCancelled(true);
+					}
+				}
+				else
+				{
+					if(playerDestroyer.isOp())
+					{
+						
+					}
+					else
+					{
+						event.setCancelled(true);
+					}
+				}
+			}
+		}
+		else if(isTimeTrailWallSign(block))
+		{
+			if(TimeTrail.Permissions)
+			{
+				if(playerDestroyer.hasPermission("TimeTrail.create") || playerDestroyer.hasPermission("TimeTrail.*"))
+				{
+					
+				}
+				else
+				{
+					event.setCancelled(true);
+				}
+			}
+			else
+			{
+				if(playerDestroyer.isOp())
+				{
+					
+				}
+				else
+				{
+					event.setCancelled(true);
+				}
+			}
 		}
 	}
 	
@@ -124,7 +229,7 @@ public class SignListener extends JavaPlugin implements Listener
 		player = (Player) event.getPlayer();
 		Block block = event.getClickedBlock();
 		
-		if(event.getAction() == Action.RIGHT_CLICK_BLOCK && (block.getType() == Material.SIGN || (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN))) 
+		if(event.getAction() == Action.RIGHT_CLICK_BLOCK && (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)) 
 		{
 			Sign s = (Sign) event.getClickedBlock().getState();
 			String signTextLine1 = s.getLine(0);
@@ -204,5 +309,46 @@ public class SignListener extends JavaPlugin implements Listener
 		{
 			playerInteract.sendMessage("[" + ChatColor.RED + "TIMETRAIL" + ChatColor.WHITE + "] This is the wrong ending.");
 		}
+	}
+	
+	public boolean isTimeTrailWallSign(Block block)
+	{
+		if(block.getRelative(BlockFace.NORTH).getType().equals(Material.WALL_SIGN))
+		{
+			isTimeTrailWallSign = (Sign) block.getRelative(BlockFace.NORTH).getState();
+			String isTimeTrailWallSignText = isTimeTrailWallSign.getLine(0);
+			if(isTimeTrailWallSignText.equalsIgnoreCase("[TimeTrail]"))
+			{
+				return true;
+			}
+		}
+		if(block.getRelative(BlockFace.EAST).getType().equals(Material.WALL_SIGN))
+		{
+			isTimeTrailWallSign = (Sign) block.getRelative(BlockFace.EAST).getState();
+			String isTimeTrailWallSignText = isTimeTrailWallSign.getLine(0);
+			if(isTimeTrailWallSignText.equalsIgnoreCase("[TimeTrail]"))
+			{
+				return true;
+			}
+		}
+		if(block.getRelative(BlockFace.SOUTH).getType().equals(Material.WALL_SIGN))
+		{
+			isTimeTrailWallSign = (Sign) block.getRelative(BlockFace.SOUTH).getState();
+			String isTimeTrailWallSignText = isTimeTrailWallSign.getLine(0);
+			if(isTimeTrailWallSignText.equalsIgnoreCase("[TimeTrail]"))
+			{
+				return true;
+			}
+		}
+		if(block.getRelative(BlockFace.WEST).getType().equals(Material.WALL_SIGN))
+		{
+			isTimeTrailWallSign = (Sign) block.getRelative(BlockFace.WEST).getState();
+			String isTimeTrailWallSignText = isTimeTrailWallSign.getLine(0);
+			if(isTimeTrailWallSignText.equalsIgnoreCase("[TimeTrail]"))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
